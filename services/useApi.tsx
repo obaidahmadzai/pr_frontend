@@ -1,3 +1,4 @@
+"use client";
 import axios from "@/lib/axios";
 import useSWR, { mutate } from "swr";
 import { toast } from "react-toastify";
