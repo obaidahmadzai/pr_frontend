@@ -13,21 +13,14 @@ import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box/Box";
 import Link from "next/link";
 import { useApi } from "@/services/useApi";
-interface vehicle {
+interface container {
   id: number;
-  make: string;
-  model: string;
-  year: string;
-  color: string;
-  registrationNumber: string;
-  container: {
-    code: string;
-  };
+  code: string;
 }
 [];
 
-export default function VehiclesPage() {
-  const { All, Delete } = useApi({ api: "vehicle" });
+export default function ContainersPage() {
+  const { All, Delete } = useApi({ api: "container" });
   const { data, error, isLoading } = All();
 
   if (isLoading) return "loading...";
@@ -38,7 +31,7 @@ export default function VehiclesPage() {
   return (
     <>
       <Link
-        href="/vehicles/add"
+        href="/containers/add"
         style={{
           fontWeight: "bold",
           color: "black",
@@ -54,22 +47,7 @@ export default function VehiclesPage() {
           <TableHead>
             <TableRow>
               <TableCell align="left" sx={{ fontWeight: "bold" }}>
-                Make
-              </TableCell>
-              <TableCell align="left" sx={{ fontWeight: "bold" }}>
-                Model
-              </TableCell>
-              <TableCell align="left" sx={{ fontWeight: "bold" }}>
-                Year
-              </TableCell>
-              <TableCell align="left" sx={{ fontWeight: "bold" }}>
-                Color
-              </TableCell>
-              <TableCell align="left" sx={{ fontWeight: "bold" }}>
-                Registration Number
-              </TableCell>
-              <TableCell align="left" sx={{ fontWeight: "bold" }}>
-                Container
+                Code
               </TableCell>
               <TableCell align="left" sx={{ fontWeight: "bold" }}>
                 Action
@@ -77,20 +55,15 @@ export default function VehiclesPage() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map((row: vehicle) => (
+            {data.map((row: container) => (
               <TableRow
                 key={row.id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
-                <TableCell align="left">{row.make}</TableCell>
-                <TableCell align="left">{row.model}</TableCell>
-                <TableCell align="left">{row.year}</TableCell>
-                <TableCell align="left">{row.color}</TableCell>
-                <TableCell align="left">{row.registrationNumber}</TableCell>
-                <TableCell align="left">{row.container?.code}</TableCell>
+                <TableCell align="left">{row.code}</TableCell>
                 <TableCell>
                   <Stack direction="row" spacing={2}>
-                    <Link href={`vehicles/edit/${row.id}`}>
+                    <Link href={`containers/edit/${row.id}`}>
                       <EditIcon sx={{ color: "black" }} />
                     </Link>
                     <DeleteIcon onClick={() => deleteItem(row.id)} />

@@ -17,18 +17,12 @@ export const useApi = ({ api }: { api: string }) => {
     return { data, error, isLoading };
   };
 
-  const Add = ({
-    data,
-    handleReset,
-  }: {
-    data: any;
-    handleReset: () => void;
-  }) => {
+  const Add = (data: any) => {
     axios
       .post(api, data)
       .then((res) => {
         toast.info("Form submitted successfully!");
-        handleReset();
+        // handleReset();
       })
       .catch((error) => {
         if (error.response.status !== 422) throw error;
@@ -47,20 +41,12 @@ export const useApi = ({ api }: { api: string }) => {
     return { data, error, isLoading };
   };
 
-  const Update = ({
-    data,
-    id,
-    handleReset,
-  }: {
-    data: any;
-    id: number;
-    handleReset: () => void;
-  }) => {
+  const Update = (data: any, id: number) => {
     axios
-      .post(`${api}/${id && id}`, data)
+      .put(`${api}/${id}`, data)
       .then((res) => {
         toast.info("Data updated successfully!");
-        handleReset();
+        // handleReset();
       })
       .catch((error) => {
         if (error.response.status !== 422) throw error;
