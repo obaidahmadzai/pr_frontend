@@ -82,11 +82,37 @@ export const useApi = ({ api }: { api: string }) => {
 
   //     return formData;
   //   };
+
+  const Search = (query: any): any => {
+    const q = {
+      search: query,
+    };
+    const config: any = {
+      params: q,
+    };
+    let data = axios
+      .get(`${api}/search/query/`, config)
+      .then((res) => {
+        return res.data;
+        // handleReset();
+      })
+      .catch((error) => {
+        // if (error.response.status !== 422) throw error;
+        // error.response.data.errors &&
+        //   Object.values(error.response.data.errors).forEach((value: any) => {
+        //     value.forEach((message: string) => {
+        //       toast.warning(message);
+        //     });
+        //   });
+      });
+    return data;
+  };
   return {
     Add,
     Get,
     Update,
     Delete,
     All,
+    Search,
   };
 };

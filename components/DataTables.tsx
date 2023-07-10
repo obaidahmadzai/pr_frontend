@@ -26,10 +26,10 @@ interface TablePaginationActionsProps {
     newPage: number
   ) => void;
 }
-export default function VehiclesPage() {
+export default function DataTable(data: any, columns: any) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(1);
-  const [values, setValues] = React.useState([]);
+  const [values, setValues] = React.useState([...data]);
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -74,23 +74,17 @@ export default function VehiclesPage() {
     };
   }
 
-  const { All, Delete, Search } = useApi({ api: "vehicle" });
-  const { data, error, isLoading } = All();
+  const { All, Delete, Get } = useApi({ api: "vehicle" });
+  //   const { data, error, isLoading } = All();
 
-  React.useEffect(() => {
-    setValues(data);
-  }, [data]);
-  if (isLoading) return "loading...";
-  if (error) return "Error...";
+  //   if (isLoading) return "loading...";
+  //   if (error) return "Error...";
   const deleteItem = (id: number) => {
     Delete(id);
   };
   const searchItem = (e: any) => {
-    const data = Search(e.target.value);  
-    data.then((data: any) => {
-      setValues(data);
-    });
-    // setValues(data);
+    const { data, error, isLoading } = Get(e.target.value);
+    useEffect;
   };
   return (
     <>
