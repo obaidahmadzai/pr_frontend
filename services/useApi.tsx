@@ -2,6 +2,7 @@
 import axios from "@/lib/axios";
 import useSWR, { mutate } from "swr";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 export interface ApiResponse<T> {
   data: T;
@@ -10,6 +11,7 @@ export interface ApiResponse<T> {
 }
 
 export const useApi = ({ api }: { api: string }) => {
+  const router = useRouter();
   const All = (): ApiResponse<any> => {
     const { data, error, isLoading } = useSWR(api, () =>
       axios.get(api).then((res) => res.data)
@@ -23,6 +25,7 @@ export const useApi = ({ api }: { api: string }) => {
       .then((res) => {
         toast.info("Form submitted successfully!");
         handleReset();
+        router.back();
       })
       .catch((error) => {
         if (error.response.status !== 422) throw error;
@@ -46,6 +49,7 @@ export const useApi = ({ api }: { api: string }) => {
       .put(`${api}/${id}`, data)
       .then((res) => {
         toast.info("Data updated successfully!");
+        router.back();
         // handleReset();
       })
       .catch((error) => {
