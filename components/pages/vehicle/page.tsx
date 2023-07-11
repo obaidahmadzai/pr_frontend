@@ -1,42 +1,79 @@
 "use client";
-import * as React from "react";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
+import Box from "@mui/material/Box";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import Stack from "@mui/material/Stack";
-import Box from "@mui/material/Box/Box";
+import { DataGrid } from "@mui/x-data-grid";
 import Link from "next/link";
+import moment from "moment";
+import { useState, useEffect } from "react";
+import TextField from "@mui/material/TextField";
+
 import { useApi } from "@/services/useApi";
-interface vehicle {
-  id: number;
-  make: string;
-  model: string;
-  year: string;
-  color: string;
-  registrationNumber: string;
-  container: {
-    code: string;
-  };
-}
-[];
 
-export default function VehiclesPage() {
-  const { All, Delete } = useApi({ api: "vehicle" });
+export default function vehiclePage() {
+  const { All, Delete, Search } = useApi({ api: "vehicle" });
   const { data, error, isLoading } = All();
+  const [pageSize, SetPageSize] = useState(1);
+  const [values, setValues] = useState(data ? data : []);
 
-  if (isLoading) return "loading...";
-  if (error) return "Error...";
+  useEffect(() => {
+    setValues(data);
+  }, [data]);
+
   const deleteItem = (id: number) => {
     Delete(id);
   };
+
+  const searchItem = (e: any) => {
+    if (e.key == "Enter" && e.target.value != "") {
+      const data = Search(e.target.value);
+      data.then((data: any) => {
+        setValues(data);
+      });
+      setValues(data);
+    }
+  };
+  const onblur = (e: any) => {
+    if (e.target.value == "" && values != data) {
+      setValues(data);
+    }
+  };
+
+  const columns = [
+    { field: "make", headerName: "Make", width: 200 },
+    { field: "model", headerName: "Model", width: 200 },
+    { field: "year", headerName: "Year", width: 200 },
+    { field: "color", headerName: "Color", width: 200 },
+    {
+      field: "registrationNumber",
+      headerName: "Registration Number",
+      width: 200,
+    },
+    {
+      field: "createdAt",
+      headerName: "Created At",
+      width: 200,
+      renderCell: (params: any) =>
+        moment(params.row.createdAt).format("YYYY-MM-DD HH:MM:SS"),
+    },
+    {
+      field: "action",
+      headerName: "Action",
+      width: 300,
+      renderCell: (params: any) => (
+        <Stack direction="row" spacing={2}>
+          <Link href={`vehicles/edit/${params.row.id}`}>
+            <EditIcon sx={{ color: "black" }} />
+          </Link>
+          <DeleteIcon onClick={() => deleteItem(params.row.id)} />
+        </Stack>
+      ),
+    },
+  ];
+
   return (
-    <>
+    <Box sx={{ width: "100%" }}>
       <Link
         href="/vehicles/add"
         style={{
@@ -45,62 +82,33 @@ export default function VehiclesPage() {
           textDecoration: "none",
         }}
       >
-        <Box component="span" sx={{ p: 2, border: "1px dashed grey" }}>
+        <Box
+          component="span"
+          sx={{
+            p: 2,
+            border: "1px dashed grey",
+            marginBottom: 2,
+            display: "inline-block",
+          }}
+        >
           Add New
         </Box>
       </Link>
-      <TableContainer component={Paper} sx={{ mt: 5 }}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell align="left" sx={{ fontWeight: "bold" }}>
-                Make
-              </TableCell>
-              <TableCell align="left" sx={{ fontWeight: "bold" }}>
-                Model
-              </TableCell>
-              <TableCell align="left" sx={{ fontWeight: "bold" }}>
-                Year
-              </TableCell>
-              <TableCell align="left" sx={{ fontWeight: "bold" }}>
-                Color
-              </TableCell>
-              <TableCell align="left" sx={{ fontWeight: "bold" }}>
-                Registration Number
-              </TableCell>
-              <TableCell align="left" sx={{ fontWeight: "bold" }}>
-                Container
-              </TableCell>
-              <TableCell align="left" sx={{ fontWeight: "bold" }}>
-                Action
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data.map((row: vehicle) => (
-              <TableRow
-                key={row.id}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell align="left">{row.make}</TableCell>
-                <TableCell align="left">{row.model}</TableCell>
-                <TableCell align="left">{row.year}</TableCell>
-                <TableCell align="left">{row.color}</TableCell>
-                <TableCell align="left">{row.registrationNumber}</TableCell>
-                <TableCell align="left">{row.container?.code}</TableCell>
-                <TableCell>
-                  <Stack direction="row" spacing={2}>
-                    <Link href={`vehicles/edit/${row.id}`}>
-                      <EditIcon sx={{ color: "black" }} />
-                    </Link>
-                    <DeleteIcon onClick={() => deleteItem(row.id)} />
-                  </Stack>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </>
+      <TextField
+        fullWidth
+        label="Search"
+        onKeyUp={(e) => searchItem(e)}
+        onBlur={(e) => onblur(e)}
+      />
+      <DataGrid
+        autoHeight
+        rows={values}
+        columns={columns}
+        getRowId={(row) => row?.id}
+        // rowsPerPageOptions={[5, 10, 20]}
+        // // pageSize={pageSize}
+        // onPageSizeChange={(newPageSize: any) => SetPageSize(newPageSize)}
+      />
+    </Box>
   );
 }

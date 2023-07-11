@@ -14,6 +14,10 @@
     "@mui/icons-material": "^5.13.7",
     "@mui/material": "^5.13.7",
     "@mui/x-data-grid": "^6.9.2",
+<<<<<<< HEAD
+=======
+    "@mui/x-data-grid-generator": "^6.9.2",
+>>>>>>> 7930bcbfc6ba9bc9c4810a293d64a853d721bc50
     "@types/node": "20.4.0",
     "@types/react": "18.2.14",
     "@types/react-dom": "18.2.6",
@@ -21,6 +25,8 @@
     "eslint": "8.44.0",
     "eslint-config-next": "13.4.9",
     "formik": "^2.4.2",
+    "moment": "^2.29.4",
+    "mui-datatables": "^4.3.0",
     "next": "13.4.9",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -28,5 +34,9 @@
     "swr": "^2.2.0",
     "typescript": "5.1.6",
     "yup": "^1.2.0"
+  },
+  "devDependencies": {
+    "@types/mui-datatables": "^4.3.5",
+    "@types/nprogress": "^0.2.0"
   }
 }

@@ -1,58 +1,59 @@
-import * as React from "react";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
+"use client";
+import Box from "@mui/material/Box";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import Stack from "@mui/material/Stack";
+import { DataGrid } from "@mui/x-data-grid";
+import Link from "next/link";
+import moment from "moment";
+import { useState } from "react";
+import TextField from "@mui/material/TextField";
 
-function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number
-) {
-  return { name, calories, fat, carbs, protein };
-}
+import { useApi } from "@/services/useApi";
 
-const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-];
+export default function dataGridTest({
+  columns,
+  data,
+  searchItem,
+}: {
+  columns: any;
+  data: any;
+  searchItem: (e: any) => void;
+}) {
+  const [pageSize, SetPageSize] = useState(1);
 
-export default function DataTable(rowss: any, data: any) {
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
-        <TableHead>
-          {rowss.map((header: any) => (
-            <TableRow key={header.name}>
-              <TableCell align="right">header</TableCell>
-            </TableRow>
-          ))}
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow
-              key={row.name}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {row.name}
-              </TableCell>
-              <TableCell align="right">{row.calories}</TableCell>
-              <TableCell align="right">{row.fat}</TableCell>
-              <TableCell align="right">{row.carbs}</TableCell>
-              <TableCell align="right">{row.protein}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <Box sx={{ width: "100%" }}>
+      <Link
+        href="/vehicles/add"
+        style={{
+          fontWeight: "bold",
+          color: "black",
+          textDecoration: "none",
+        }}
+      >
+        <Box
+          component="span"
+          sx={{
+            p: 2,
+            border: "1px dashed grey",
+            marginBottom: 2,
+            display: "inline-block",
+          }}
+        >
+          Add New
+        </Box>
+      </Link>
+      <TextField fullWidth label="Search" onChange={(e) => searchItem(e)} />
+      <DataGrid
+        autoHeight
+        rows={data}
+        columns={columns}
+        getRowId={(row) => row?.id}
+        rowsPerPageOptions={[5, 10, 20]}
+        pageSize={pageSize}
+        onPageSizeChange={(newPageSize: any) => SetPageSize(newPageSize)}
+      />
+    </Box>
   );
 }
