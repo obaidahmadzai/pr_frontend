@@ -14,10 +14,6 @@
     "@mui/icons-material": "^5.13.7",
     "@mui/material": "^5.13.7",
     "@mui/x-data-grid": "^6.9.2",
-<<<<<<< HEAD
-=======
-    "@mui/x-data-grid-generator": "^6.9.2",
->>>>>>> 7930bcbfc6ba9bc9c4810a293d64a853d721bc50
     "@types/node": "20.4.0",
     "@types/react": "18.2.14",
     "@types/react-dom": "18.2.6",
