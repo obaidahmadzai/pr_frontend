@@ -14,9 +14,10 @@ type container = {
   id: number;
   code: string;
 };
+type handleResetFuc = (a: any) => void;
 type FormProps = {
   data: any;
-  onSubmit: ({}) => void;
+  onSubmit: ({}, handleReset: handleResetFuc) => void;
 };
 function VehicleForm({ data, onSubmit }: FormProps) {
   const { All } = useApi({ api: "container" });
@@ -45,7 +46,7 @@ function VehicleForm({ data, onSubmit }: FormProps) {
 
     enableReinitialize: true,
     onSubmit: (values) => {
-      onSubmit(values);
+      onSubmit(values, handleReset);
     },
   });
   if (isLoading) {

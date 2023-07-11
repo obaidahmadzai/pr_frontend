@@ -6,8 +6,8 @@ import Container from "@mui/material/Container/Container";
 
 function page() {
   const { Add } = useApi({ api: "vehicle" });
-  const onSubmit = (values: any) => {
-    Add(values);
+  const onSubmit = (values: any, handleReset: any) => {
+    Add(values, handleReset);
   };
   return (
     <div>

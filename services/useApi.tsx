@@ -17,12 +17,12 @@ export const useApi = ({ api }: { api: string }) => {
     return { data, error, isLoading };
   };
 
-  const Add = (data: any) => {
+  const Add = (data: any, handleReset: Function) => {
     axios
       .post(api, data)
       .then((res) => {
         toast.info("Form submitted successfully!");
-        // handleReset();
+        handleReset();
       })
       .catch((error) => {
         if (error.response.status !== 422) throw error;
